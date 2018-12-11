@@ -52,10 +52,7 @@ export default class HomeScreen extends React.Component {
             <View style={styles.container}>
                 <Animatable.View animation="zoomInDown" duration={2000} style={styles.textView}>
                 <Text style={{ color: "lightblue", textAlign: "center" }} h1>
-                    React-
-                    <Text style={{ color: "lightblue", textAlign: "center" }} h1>
-                    Native
-                    </Text>
+                    React-Native
                 </Text>
                 <Text style={{ color: "lightblue", textAlign: "center" }} h1>
                     Final

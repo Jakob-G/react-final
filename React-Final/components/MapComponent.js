@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TextInput } from 'react-native';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import Permissions from "react-native-permissions";
 import { Dimensions } from 'react-native';
-
+// https://www.mapquestapi.com/geocoding/v1/address?key=lMGA4JJTNMA2NmvIn9GNEyg4lU32GTv4&inFormat=kvp&outFormat=json&location=******&thumbMaps=false
 export default class MapComponent extends Component {
 
         static navigationOptions = {
@@ -31,13 +31,29 @@ export default class MapComponent extends Component {
         };
     }
 
+
+
+    fetchTodos(location){
+        fetch(`https://www.mapquestapi.com/geocoding/v1/address?key=lMGA4JJTNMA2NmvIn9GNEyg4lU32GTv4&inFormat=kvp&outFormat=json&location=${location}*&thumbMaps=false`)
+        .then((response) => response.json())
+        .then((response) => {
+            this.setState({
+                region: {
+                    latitude: response.results[0].locations[0].latLng.lat,
+                    latitudeDelta: 0.025,
+                    longitude: response.results[0].locations[0].latLng.lng,
+                    longitudeDelta: 0.025
+                }
+            });
+        })
+    }
+
     _requestPermissions() {
         Permissions.request('location')
             .then(response => {
                 this.setState({
                     locationPermission: response
                 })
-                console.log("Response: " + response);
             });
     }
 
@@ -57,13 +73,21 @@ export default class MapComponent extends Component {
         },
             (error) => alert(JSON.stringify(error)));
     }
-//to make scrollable remove views
     render() {
         const maps = [];
         return (
             <View>
                 <View style={styles.top}>
-                    
+                    <TextInput style={{
+                    height:'100%',
+                    width:'100%',
+                    borderColor:'gray',
+                    borderWidth:1,
+                    textAlign:'center'
+                    }}
+                    placeholder="Enter a Destination"
+                    onSubmitEditing={(event)=> this.fetchTodos(event.nativeEvent.text)}
+                    />
                 </View>
                 <MapView
                 //liteMode 
